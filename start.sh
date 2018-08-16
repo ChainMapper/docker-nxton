@@ -1,26 +1,35 @@
 #!/bin/bash
-echo "Docker Next-On wallet
 
-By: Jos Hendriks
-GitHub: https://github.com/joshendriks/
-Docker: https://hub.docker.com/r/joshendriks/ 
+configfile=$1
+ticker=$2
+walletdaemon=$3
 
-BTC: 1NCZgpMMoNwL6ZeFsEQ2kRZEzzzTd5TuGk
-NXTON: NUpMGR21cqJuKMU5LBaY7VUVTDz2Uh8W9A"
+datadir=/data/wallet
+configdir="/config"
+walletfile="wallet.dat"
+echo "Docker $ticker wallet
 
-config="/config/nxton.conf"
-if [ -f "$config" ]
-then
-    echo "Using $config"
-    cp $config /data/.NXTON/nxton.conf
-fi
+By: ChainMapper
+Website: https://chainmapper.com"
 
-wallet="/config/wallet.dat"
+mkdir -p $datadir
+
+wallet="$configdir/$walletfile"
 if [ -f "$wallet" ]
 then
     echo "Using $wallet"
-    cp $wallet /data/.NXTON/wallet.dat
+    cp $wallet $datadir/$walletfile
 fi
 
-echo "Starting NXTON daemon..."
-nxtond
+config="$configdir/$configfile"
+if [ -f "$config" ]
+then
+    echo "Using $config"
+    cp $config $datadir/$configfile
+else
+    touch $datadir/$configfile
+    /gen_config.sh > $datadir/$configfile
+fi
+
+echo "Starting $ticker daemon..."
+$walletdaemon -datadir=$datadir
