@@ -18,4 +18,4 @@ ENV HOME /data
 COPY start.sh /start.sh
 COPY gen_config.sh /gen_config.sh
 RUN chmod +x /*.sh
-CMD /start.sh nxton NXTON nxtond
+CMD /start.sh nxton.conf NXTON nxtond
